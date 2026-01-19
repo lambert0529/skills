@@ -2,7 +2,7 @@
 
 **文档版本**：v2.1.0  
 **更新日期**：2026-01-19  
-**作者**：主数据团队  
+**作者**：lambert  
 **状态**：已发布
 
 > **说明**：本文档基于 **Anthropic Skills 开放标准**编写，适用于所有支持该标准的 AI 编程助手（Cursor、Claude Code、Windsurf、Aider 等）。文档中会特别说明 Cursor 中的实现方式。
@@ -45,13 +45,12 @@
    - **YAML Front Matter**（必需）：包含元数据
      ```yaml
      ---
-     name: skill-name          # 技能名称
-     description: 技能描述      # 用于 Agent 匹配任务
-     version: 1.0.0            # 版本号
-     tags: [tag1, tag2]        # 标签（可选）
+     name: skill-name          # 必需：技能名称（kebab-case）
+     description: 技能描述      # 必需：技能描述（用于 Agent 匹配任务，应包含具体使用场景）
      ---
      ```
-   - **Markdown 内容**：技能说明、使用方法、行为定义等
+     **注意**：根据 Anthropic Skills 规范，frontmatter 只包含 `name` 和 `description` 两个字段，不包含 `version` 和 `tags`。
+   - **Markdown 内容**：技能说明、使用方法、行为定义等（应保持简洁，<500行，推荐<300行）
 
 3. **核心组成**
 
@@ -69,9 +68,14 @@
      - 当 Agent 识别任务与特定领域相关时，可以拉进这些知识来帮助完成任务
      - 例如：代码审查规范、测试生成模板
 
-   - **模板和参考资料**
-     - 可复用的代码模板、配置文件模板
-     - 参考资料文档、最佳实践指南
+   - **assets/**（资源文件）
+     - 不加载到上下文，而是用于输出的文件
+     - 例如：代码模板、图标、字体、PPT 模板、HTML/React 样板等
+   
+   - **references/**（参考资料）
+     - 文档和参考资料，按需加载到上下文中
+     - 例如：API 文档、数据库模式、工作流指南、详细规范等
+     - 最佳实践：如果文件较大（>10k 词），在 SKILL.md 中包含 grep 搜索模式
 
 ### 1.3 核心特点
 
@@ -117,9 +121,9 @@
 ```
 skill-name/
 ├── SKILL.md          # 必需：技能定义（YAML front matter + Markdown）
-├── scripts/          # 可选：脚本文件
-├── templates/         # 可选：模板文件
-└── references/        # 可选：参考资料
+├── scripts/          # 可选：脚本文件（自动化任务逻辑）
+├── assets/           # 可选：资源文件（用于输出的模板、图标、字体等）
+└── references/       # 可选：文档和参考资料（按需加载）
 ```
 
 **调用方式**：
@@ -285,9 +289,9 @@ Commands（可选，建议迁移到 Skills）：
   - /quick-review：快速代码审查
   - /format-code：代码格式化
 
-Skills（code-reviewer，Anthropic 标准）：
-  - 代码审查工作流（跨平台可复用）
-  - 审查报告生成模板
+Skills（java-rest-api-design，Anthropic 标准）：
+  - RESTful API 设计工作流（跨平台可复用）
+  - Controller 和 DTO 生成模板
   - 支持自动发现和手动调用
 
 MCP（数据库连接，开放协议）：
@@ -326,74 +330,123 @@ Skills 可以帮助我们：
 
 ### 3.2 实际应用场景
 
-#### 场景 1：代码审查自动化
+#### 场景 1：RESTful API 设计
 
-**技能**：`code-reviewer`
+**技能**：`java-rest-api-design`
 
 **功能**：
-- 自动检查编码规范
-- 识别潜在问题（空指针、性能问题、安全问题）
-- 生成详细的审查报告
+- 生成符合规范的 RESTful API 接口
+- 创建 Controller 层代码
+- 生成 API 相关的 DTO 类
+- 遵循 Spring Boot 最佳实践和 RESTful 规范
 
 **使用**：
 ```
-用户：审查 metadata 模块的代码
-Agent：使用 code-reviewer 技能 → 生成审查报告
+用户：为用户管理创建 REST API 接口
+Agent：使用 java-rest-api-design 技能 → 生成 Controller 和 DTO
 ```
 
-#### 场景 2：单元测试生成
+#### 场景 2：Service 层开发
 
-**技能**：`unit-test-generator`
+**技能**：`java-service-layer`
 
 **功能**：
-- 自动分析被测试类
-- 生成符合规范的测试代码
-- 包含正常流程和异常场景
+- 生成 Service 接口和实现类
+- 实现业务逻辑和事务管理
+- 遵循分层架构最佳实践
 
 **使用**：
 ```
-用户：为 ModelService 生成单元测试
-Agent：使用 unit-test-generator 技能 → 生成测试文件
+用户：创建用户 Service 层，包含事务管理
+Agent：使用 java-service-layer 技能 → 生成 Service 代码
 ```
 
-#### 场景 3：API 文档生成
+#### 场景 3：异常处理机制
 
-**技能**：`api-doc-generator`
+**技能**：`java-exception-handling`
 
 **功能**：
-- 自动提取接口信息
-- 生成 OpenAPI 规范文档
-- 包含请求/响应示例
+- 设计全局异常处理器
+- 定义错误码和异常类
+- 统一异常响应格式
 
 **使用**：
 ```
-用户：为 ModelController 生成 API 文档
-Agent：使用 api-doc-generator 技能 → 生成文档
+用户：设计异常处理机制
+Agent：使用 java-exception-handling 技能 → 生成异常处理代码
 ```
 
-#### 场景 4：DDL 生成
+#### 场景 4：参数校验
 
-**技能**：`ddl-generator`
+**技能**：`java-validation`
 
 **功能**：
-- 根据模型定义生成 DDL
-- 验证表结构规范
-- 生成迁移脚本
+- 为请求参数添加校验注解
+- 创建自定义校验器
+- 实现分组校验
 
 **使用**：
 ```
-用户：为组织模型生成 DDL
-Agent：使用 ddl-generator 技能 → 生成 DDL 文件
+用户：为创建用户请求添加参数校验
+Agent：使用 java-validation 技能 → 生成校验代码
+```
+
+#### 场景 5：统一响应格式
+
+**技能**：`java-response-wrapper`
+
+**功能**：
+- 创建统一响应包装类
+- 实现分页响应格式
+- 统一 API 返回格式
+
+**使用**：
+```
+用户：设计统一响应格式
+Agent：使用 java-response-wrapper 技能 → 生成响应类
+```
+
+#### 场景 6：日志记录
+
+**技能**：`java-logging`
+
+**功能**：
+- 配置日志格式和级别
+- 实现日志脱敏
+- 遵循日志记录最佳实践
+
+**使用**：
+```
+用户：为 Service 添加日志记录
+Agent：使用 java-logging 技能 → 生成日志配置和代码
+```
+
+#### 场景 7：MyBatis-Plus 代码生成
+
+**技能**：`java-mybatis-plus-generator`
+
+**功能**：
+- 生成基于 MyBatis-Plus 的完整分层代码
+- 创建 Controller、Service、Mapper 层
+- 集成 PageHelper 分页功能
+
+**使用**：
+```
+用户：为用户管理生成基于 MyBatis-Plus 的 CRUD 代码
+Agent：使用 java-mybatis-plus-generator 技能 → 生成完整代码
 ```
 
 ### 3.3 当前项目的 Skills
 
-你的项目已经创建了以下技能：
+本项目已创建了以下 Java 后端开发 Skills：
 
-1. **unit-test-generator** - 单元测试生成
-2. **code-reviewer** - 代码审查
-3. **api-doc-generator** - API 文档生成
-4. **ddl-generator** - DDL 生成与验证
+1. **java-rest-api-design** - RESTful API 设计规范
+2. **java-service-layer** - Service 层开发规范
+3. **java-exception-handling** - 异常处理规范
+4. **java-validation** - 参数校验规范
+5. **java-response-wrapper** - 统一响应格式规范
+6. **java-logging** - 日志记录规范
+7. **java-mybatis-plus-generator** - MyBatis-Plus 代码生成
 
 ---
 
@@ -441,9 +494,9 @@ Agent：使用 ddl-generator 技能 → 生成 DDL 文件
 **配置示例**：
 ```yaml
 ---
-name: code-reviewer
-description: 代码审查技能
-user-invocable: true  # 允许手动调用，会在界面中显示为 /code-reviewer
+name: java-rest-api-design
+description: 生成符合主流规范的 Java RESTful API 接口设计，包括 Controller、DTO、统一响应格式、异常处理等。使用场景：(1) 创建新的 REST API 接口，(2) 设计 Controller 层代码，(3) 生成 API 相关的 DTO 类，(4) 审查或优化现有 API 设计，(5) 需要遵循 Spring Boot 最佳实践和 RESTful 规范时
+user-invocable: true  # 允许手动调用，会在界面中显示为 /java-rest-api-design
 disable-model-invocation: false  # 允许自动触发
 ---
 ```
@@ -455,7 +508,7 @@ disable-model-invocation: false  # 允许自动触发
 项目根目录/
 └── .claude/
     └── skills/
-        └── code-reviewer/
+        └── java-rest-api-design/
             └── SKILL.md
 ```
 
@@ -464,14 +517,14 @@ disable-model-invocation: false  # 允许自动触发
 项目根目录/
 └── .agent/
     └── skills/
-        └── code-reviewer/
+        └── java-rest-api-design/
             └── SKILL.md
 ```
 
 **方式三：全局 Skills**
 ```
 ~/.claude/skills/
-└── code-reviewer/
+└── java-rest-api-design/
     └── SKILL.md
 ```
 
@@ -729,8 +782,8 @@ openskills sync --yes
 ```xml
 <available_skills>
   <skill>
-    <name>code-reviewer</name>
-    <description>对代码进行自动化审查...</description>
+    <name>java-rest-api-design</name>
+    <description>生成符合主流规范的 Java RESTful API 接口设计，包括 Controller、DTO、统一响应格式、异常处理等。使用场景：(1) 创建新的 REST API 接口，(2) 设计 Controller 层代码，(3) 生成 API 相关的 DTO 类，(4) 审查或优化现有 API 设计，(5) 需要遵循 Spring Boot 最佳实践和 RESTful 规范时</description>
     <location>project</location>
   </skill>
 </available_skills>
@@ -740,7 +793,7 @@ openskills sync --yes
 
 ```bash
 # 读取技能内容
-openskills read code-reviewer
+openskills read java-rest-api-design
 
 # 读取多个技能
 openskills read skill-one,skill-two
@@ -783,40 +836,47 @@ openskills manage
 
 ```yaml
 ---
-name: code-reviewer                    # 必需：技能名称（kebab-case）
-description: 对代码进行自动化审查...   # 必需：技能描述（用于 Agent 匹配任务）
-version: 1.0.0                         # 可选：版本号
-tags: [code-review, quality, security] # 可选：标签数组
+name: java-rest-api-design                    # 必需：技能名称（kebab-case）
+description: 生成符合主流规范的 Java RESTful API 接口设计，包括 Controller、DTO、统一响应格式、异常处理等。使用场景：(1) 创建新的 REST API 接口，(2) 设计 Controller 层代码，(3) 生成 API 相关的 DTO 类，(4) 审查或优化现有 API 设计，(5) 需要遵循 Spring Boot 最佳实践和 RESTful 规范时
 ---
 
-# 技能名称
+# Java RESTful API 设计规范
 
-## 描述
-详细描述...
+## 快速开始
+生成 RESTful API 接口的基本步骤...
 
-## 触发条件
-- 当用户提到...
-- 可通过 `/skill-name` 命令触发
-
-## 使用方法
-...
-
-## 技能行为
-1. 步骤一
-2. 步骤二
-...
+## 详细参考
+- RESTful 模式：见 [references/restful-patterns.md](references/restful-patterns.md)
+- DTO 模式：见 [references/dto-patterns.md](references/dto-patterns.md)
+- 代码模板：见 `assets/ControllerTemplate.java` 和 `assets/CreateRequestTemplate.java`
 ```
 
 **标准要求**：
-- ✅ **YAML Front Matter**（必需）：包含 `name` 和 `description` 字段
-- ✅ **Markdown 内容**：技能说明、使用方法、行为定义等
+- ✅ **YAML Front Matter**（必需）：只包含 `name` 和 `description` 两个字段
+- ✅ **Markdown 内容**：技能说明、使用方法、行为定义等（应保持简洁，<500行，推荐<300行）
 - ✅ **目录结构**：技能目录名应与 `name` 字段一致（kebab-case）
-- ✅ **可选的资源文件**：脚本、模板、参考资料等
+- ✅ **可选的资源文件**：
+  - `scripts/` - 可执行脚本（自动化任务逻辑）
+  - `assets/` - 用于输出的文件（模板、图标、字体等）
+  - `references/` - 按需加载的文档和参考资料
 
 **重要说明**：
-- ✅ YAML front matter 中的 `description` 会被 OpenSkills 同步到 AGENTS.md
-- ❌ Markdown 中的 "## 描述" 部分不会被 OpenSkills 读取（仅用于人类阅读）
+- ✅ YAML front matter 中的 `description` 会被 OpenSkills 同步到 AGENTS.md，应包含具体使用场景
+- ✅ 遵循渐进式披露原则：SKILL.md 保持简洁（<500行，推荐<300行），详细内容放在 `references/` 中
+- ✅ 代码模板放在 `assets/` 中，不加载到上下文，仅用于输出
 - ✅ 遵循标准格式的技能可以在不同 AI 编程助手间共享
+
+**渐进式披露原则**：
+Skills 使用三级加载系统来高效管理上下文：
+1. **Metadata（name + description）** - 始终在上下文中（~100 词）
+2. **SKILL.md body** - 当技能触发时加载（<5k 词，建议 <300 行）
+3. **Bundled resources** - 按 Claude 需要时加载（无限制，因为脚本可以执行而不读入上下文窗口）
+
+**关键原则**：
+- 保持 SKILL.md 简洁，只包含核心流程和指导
+- 详细内容移到 `references/` 文件
+- 使用链接引用详细内容，确保读者知道它们存在以及何时使用
+- 避免深层嵌套引用 - 保持 references 从 SKILL.md 一级深度
 
 ### 4.7 常见问题
 
@@ -826,11 +886,12 @@ tags: [code-review, quality, security] # 可选：标签数组
 
 ```yaml
 ---
-name: skill-name
-description: 技能描述
-version: 1.0.0
+name: java-rest-api-design
+description: 生成符合主流规范的 Java RESTful API 接口设计，包括 Controller、DTO、统一响应格式、异常处理等。使用场景：(1) 创建新的 REST API 接口，(2) 设计 Controller 层代码，(3) 生成 API 相关的 DTO 类，(4) 审查或优化现有 API 设计，(5) 需要遵循 Spring Boot 最佳实践和 RESTful 规范时
 ---
 ```
+
+**注意**：根据 Anthropic Skills 规范，frontmatter 只包含 `name` 和 `description`，不需要 `version` 和 `tags`。
 
 #### Q2: 为什么 `openskills list` 显示没有技能？
 
@@ -845,10 +906,10 @@ version: 1.0.0
 
 ```bash
 # ✅ 正确
-openskills read code-reviewer
+openskills read java-rest-api-design
 
 # ❌ 错误（可能权限问题）
-npx openskills read code-reviewer
+npx openskills read java-rest-api-design
 ```
 
 ---
@@ -892,8 +953,8 @@ openskills sync --yes -o .cursor/rules/AGENTS.md
 ```xml
 <available_skills>
   <skill>
-    <name>code-reviewer</name>
-    <description>对代码进行自动化审查...</description>
+    <name>java-rest-api-design</name>
+    <description>生成符合主流规范的 Java RESTful API 接口设计，包括 Controller、DTO、统一响应格式、异常处理等。使用场景：(1) 创建新的 REST API 接口，(2) 设计 Controller 层代码，(3) 生成 API 相关的 DTO 类，(4) 审查或优化现有 API 设计，(5) 需要遵循 Spring Boot 最佳实践和 RESTful 规范时</description>
     <location>project</location>
   </skill>
 </available_skills>
@@ -914,25 +975,25 @@ Cursor Agent 会读取 `.cursor/rules/AGENTS.md` 文件中的 `<available_skills
 **方式一：自然语言触发（推荐）**
 
 ```
-你：审查 metadata 模块的代码
+你：为用户管理创建 REST API 接口
 
 Agent：
-1. 识别到需要"代码审查"任务
-2. 在 AGENTS.md 中找到 code-reviewer 技能
-3. 执行：openskills read code-reviewer
-4. 按照技能定义进行代码审查
+1. 识别到需要"REST API 设计"任务
+2. 在 AGENTS.md 中找到 java-rest-api-design 技能
+3. 执行：openskills read java-rest-api-design
+4. 按照技能定义生成 Controller 和 DTO 代码
 ```
 
 **方式二：明确指定技能**
 
 ```
-你：使用 code-reviewer 技能审查 metadata 模块的代码
+你：使用 java-rest-api-design 技能为用户管理创建 REST API
 ```
 
 **方式三：使用命令触发**
 
 ```
-你：/code-review backend/src/main/java/com/company/mdm/metadata/
+你：/java-rest-api-design 为用户管理创建 REST API
 ```
 
 ### 6.4 工作原理（Skills 标准流程）
@@ -985,21 +1046,27 @@ Agent 分析任务类型
 
 **技能目录**：`.agent/skills/`
 
-**已安装技能**：
-- `api-doc-generator` - API 文档生成
-- `code-reviewer` - 代码审查
-- `ddl-generator` - DDL 生成与验证
-- `unit-test-generator` - 单元测试生成
+**已安装技能**（从 `java/` 目录安装）：
+- `java-rest-api-design` - RESTful API 设计规范
+- `java-service-layer` - Service 层开发规范
+- `java-exception-handling` - 异常处理规范
+- `java-validation` - 参数校验规范
+- `java-response-wrapper` - 统一响应格式规范
+- `java-logging` - 日志记录规范
+- `java-mybatis-plus-generator` - MyBatis-Plus 代码生成
 
 **AGENTS.md 位置**：`.cursor/rules/AGENTS.md`
 
 **使用示例**：
 ```
 在 Cursor 中直接说：
-"为 ModelService 生成单元测试"
-"审查 metadata 模块的代码"
-"为组织模型生成 DDL"
-"为 ModelController 生成 API 文档"
+"为用户管理创建 REST API 接口"
+"创建用户 Service 层，包含事务管理"
+"设计异常处理机制"
+"为创建用户请求添加参数校验"
+"设计统一响应格式"
+"为 Service 添加日志记录"
+"为用户管理生成基于 MyBatis-Plus 的 CRUD 代码"
 ```
 
 ### 6.7 注意事项
@@ -1029,7 +1096,7 @@ openskills list
 openskills sync --yes -o .cursor/rules/AGENTS.md
 
 # 读取技能
-openskills read code-reviewer
+openskills read java-rest-api-design
 
 # 删除技能
 openskills remove old-skill
@@ -1041,7 +1108,9 @@ openskills remove old-skill
 项目根目录/
 ├── .agent/
 │   └── skills/              # 通用技能（推荐）
-│       ├── code-reviewer/
+│       ├── java-rest-api-design/
+│       │   └── SKILL.md
+│       ├── java-service-layer/
 │       │   └── SKILL.md
 │       └── ...
 ├── .claude/
@@ -1075,5 +1144,5 @@ openskills remove old-skill
 
 ---
 
-**文档维护**：主数据团队  
+**文档维护**：lambert  
 **最后更新**：2026-01-19
