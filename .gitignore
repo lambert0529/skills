@@ -1,3 +1,6 @@
+# Skills runtime directory (should not be committed)
+.agent/
+
 # macOS
 .DS_Store
 .AppleDouble
