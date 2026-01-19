@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="{packageName}.mapper.{EntityName}Mapper">
+
+    <!-- 结果映射 -->
+    <resultMap id="BaseResultMap" type="{packageName}.entity.{EntityName}">
+        <id column="id" property="id" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="deleted" property="deleted" />
+        <!-- 添加其他字段映射 -->
+    </resultMap>
+
+    <!-- 基础列 -->
+    <sql id="Base_Column_List">
+        id, create_time, update_time, deleted
+        <!-- 添加其他列 -->
+    </sql>
+
+    <!-- 自定义查询（示例） -->
+    <select id="selectCustomQuery" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM {tableName}
+        WHERE deleted = 0
+        <!-- 添加自定义查询条件 -->
+    </select>
+
+</mapper>

@@ -1,6 +1,7 @@
 # Skills runtime directory (should not be committed)
 .agent/
-
+.obsidian/
+.cursor/
 # macOS
 .DS_Store
 .AppleDouble

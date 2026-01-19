@@ -10,7 +10,7 @@ description: 生成符合规范的 Java 统一响应格式包装类，包括成�
 实现统一响应格式的基本步骤：
 
 1. 创建统一响应包装类（使用 `assets/ResultTemplate.java`）
-2. 创建分页响应类（见 [references/page-result.md](references/page-result.md)）
+2. 创建分页响应类（使用 `assets/PageResultTemplate.java`）
 3. 在 Controller 中使用统一响应格式
 4. 配置全局异常处理器返回统一格式
 
@@ -33,7 +33,7 @@ description: 生成符合规范的 Java 统一响应格式包装类，包括成�
 - 提供便捷的构建方法
 - 支持从 Spring Data 的 Page 对象转换
 
-详细实现见 [references/page-result.md](references/page-result.md)
+代码模板见 `assets/PageResultTemplate.java`
 
 ## Controller 层使用
 
@@ -69,7 +69,7 @@ public ResponseEntity<Result<UserDTO>> createUser(
 
 - **响应格式示例**：见 [references/response-formats.md](references/response-formats.md)
 - **分页响应**：见 [references/page-result.md](references/page-result.md)
-- **代码模板**：见 `assets/ResultTemplate.java`
+- **代码模板**：见 `assets/ResultTemplate.java` 和 `assets/PageResultTemplate.java`
 
 ## 注意事项
 

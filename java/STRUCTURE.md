@@ -77,6 +77,12 @@ skill-name/
 - ✅ `references/` - 日志级别使用、日志格式规范
 - ⬜ `scripts/` - （待添加）
 
+### java-mybatis-plus-generator
+- ✅ `SKILL.md` - MyBatis-Plus 代码生成规范（102 行）
+- ✅ `assets/` - Entity、Mapper、Service、Controller 模板
+- ✅ `references/` - PageHelper 使用、QueryWrapper 使用、生成示例
+- ⬜ `scripts/` - （待添加）
+
 ## 渐进式披露原则
 
 Skills 使用三级加载系统来高效管理上下文：
