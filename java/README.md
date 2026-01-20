@@ -52,6 +52,53 @@
 - 性能优化
 - 结构化日志
 
+### 7. java-mybatis-plus-generator
+**MyBatis-Plus CRUD 代码生成（传统分层架构）**
+- Entity 实体类生成（MyBatis-Plus 注解）
+- Mapper 接口和 XML 生成（继承 BaseMapper）
+- DTO 设计（Request/Response DTO）
+- DTO 转换器（Entity <-> DTO）
+- Service 层代码生成（继承 IService）
+- Controller 层代码生成（REST API）
+- PageHelper 分页支持
+- QueryWrapper 动态查询
+- 传统分层架构（Controller-Service-Mapper-Entity）
+
+### 8. java-test-patterns
+**测试模式**
+- 单元测试（JUnit 5 + Mockito）
+- 切片测试（@DataJpaTest、@WebMvcTest）
+- 集成测试（Testcontainers）
+- REST API 测试（MockMvc）
+- 测试性能优化
+
+### 9. java-security-jwt
+**JWT 安全认证**
+- JWT Token 生成和验证
+- Spring Security 配置
+- 认证过滤器实现
+- 基于角色的访问控制（RBAC）
+- Token 刷新机制
+- OAuth2 集成
+
+### 10. java-actuator
+**监控和健康检查**
+- Actuator 端点配置
+- 健康检查探针（liveness/readiness）
+- Prometheus 指标导出
+- 自定义健康指示器
+- 安全管理端点
+- Micrometer 指标
+
+### 11. java-cache
+**Spring Cache 缓存策略**
+- 缓存注解使用（@Cacheable、@CachePut、@CacheEvict）
+- Redis 缓存配置
+- Caffeine 本地缓存
+- 缓存策略（Cache-Aside、Read-Through、Write-Through）
+- 缓存失效和预热
+- 多级缓存实现
+
 ## 🚀 使用方法
 
 ### 在 Cursor 中使用
@@ -87,6 +134,11 @@ Skills 会自动被发现和使用，无需额外配置。
 - ✅ 日志记录
 - ✅ 事务管理
 - ✅ 代码规范
+- ✅ MyBatis-Plus CRUD 代码生成（传统分层架构）
+- ✅ 测试模式（单元测试、集成测试、Testcontainers）
+- ✅ JWT 安全认证和授权
+- ✅ 监控和健康检查（Actuator）
+- ✅ 缓存策略（Spring Cache）
 
 ## 🔗 相关资源
 

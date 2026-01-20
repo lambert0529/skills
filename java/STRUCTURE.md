@@ -78,9 +78,33 @@ skill-name/
 - ⬜ `scripts/` - （待添加）
 
 ### java-mybatis-plus-generator
-- ✅ `SKILL.md` - MyBatis-Plus 代码生成规范（102 行）
+- ✅ `SKILL.md` - MyBatis-Plus CRUD 代码生成规范（融合传统分层架构）
 - ✅ `assets/` - Entity、Mapper、Service、Controller 模板
-- ✅ `references/` - PageHelper 使用、QueryWrapper 使用、生成示例
+- ✅ `references/` - PageHelper 使用、QueryWrapper 使用、DTO 模式、转换器模式、完整示例
+- ⬜ `scripts/` - （待添加）
+
+### java-test-patterns
+- ✅ `SKILL.md` - 测试模式规范（包含单元测试、集成测试、Testcontainers）
+- ✅ `assets/` - 测试模板（Testcontainers 配置、MockMvc 测试）
+- ✅ `references/` - 单元测试、切片测试、集成测试、API 测试文档
+- ⬜ `scripts/` - （待添加）
+
+### java-security-jwt
+- ✅ `SKILL.md` - JWT 安全认证规范
+- ✅ `assets/` - JWT 工具类、认证过滤器、Security 配置模板（待补充）
+- ✅ `references/` - JWT 工具类、认证过滤器、Security 配置、RBAC 模式文档（待补充）
+- ⬜ `scripts/` - （待添加）
+
+### java-actuator
+- ✅ `SKILL.md` - Actuator 监控规范
+- ✅ `assets/` - 健康指示器、指标配置模板（待补充）
+- ✅ `references/` - 端点配置、健康检查、指标导出、安全管理文档（待补充）
+- ⬜ `scripts/` - （待添加）
+
+### java-cache
+- ✅ `SKILL.md` - Spring Cache 缓存规范
+- ✅ `assets/` - 缓存配置、Service 缓存使用模板（待补充）
+- ✅ `references/` - 缓存配置、缓存策略、Redis/Caffeine 配置文档（待补充）
 - ⬜ `scripts/` - （待添加）
 
 ## 渐进式披露原则
