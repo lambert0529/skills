@@ -103,8 +103,14 @@ skill-name/
 
 ### java-cache
 - ✅ `SKILL.md` - Spring Cache 缓存规范
-- ✅ `assets/` - 缓存配置、Service 缓存使用模板（待补充）
-- ✅ `references/` - 缓存配置、缓存策略、Redis/Caffeine 配置文档（待补充）
+- ✅ `assets/` - 缓存配置、Service 缓存使用模板
+- ✅ `references/` - 缓存配置、缓存策略、Redis/Caffeine 配置文档
+- ⬜ `scripts/` - （待添加）
+
+### common-development-workflow
+- ✅ `SKILL.md` - 标准化开发工作流程规范
+- ✅ `references/` - 分析文档模板、实施文档模板、代码清理指南、编译验证指南、工作流程检查清单
+- ⬜ `assets/` - （无需模板）
 - ⬜ `scripts/` - （待添加）
 
 ## 渐进式披露原则
